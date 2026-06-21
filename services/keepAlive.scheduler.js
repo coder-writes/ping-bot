@@ -3,7 +3,7 @@ import cron from "node-cron";
 import RenderUrl from "../models/url.js";
 import { AppError, pingRenderHealth } from "./render-url.service.js";
 
-const SCHEDULE_EXPRESSION = "*/2 * * * *";
+const SCHEDULE_EXPRESSION = "*/20 * * * * *";
 const MAX_FAILURES_BEFORE_DISABLE = 3;
 const MAX_CONCURRENCY = 5;
 
@@ -78,11 +78,14 @@ const runKeepAliveCycle = async () => {
   }
 
   jobRunning = true;
+  console.log(`[Scheduler] runKeepAliveCycle triggered at ${new Date().toISOString()}`);
 
   try {
     const activeUrls = await RenderUrl.find({ isActive: true })
       .select("_id healthUrl failureCount")
       .lean();
+
+    console.log(`[Scheduler] Found ${activeUrls.length} active URLs to ping`);
 
     if (!activeUrls.length) {
       return;
