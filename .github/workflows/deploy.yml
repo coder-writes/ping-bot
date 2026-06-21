@@ -19,5 +19,7 @@ jobs:
           script: |
             cd /home/ubuntu/ping-bot
             git pull origin main
-            npm install
-            pm2 restart ping-bot
+
+            /home/ubuntu/.nvm/versions/node/v24.14.1/bin/npm install
+
+            /home/ubuntu/.nvm/versions/node/v24.14.1/bin/pm2 restart ping-bot
